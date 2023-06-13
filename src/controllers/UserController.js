@@ -12,7 +12,7 @@ class UserController {
 
   async index(request, response) {
     try {
-      const users = await User.findAll();
+      const users = await User.findAll( {attributes: ['id','email','nome']});
       return response.json({ users });
     } catch (e) {
       response.status(400).json({ errors: e.errors.map((err) => err.message) });
@@ -30,10 +30,10 @@ class UserController {
 
   async update(request, response) {
     try {
-      if (!request.params.id) {
+      if (!request.userId) {
         return response.status(400).json({ errors: ["ID inválido!"] });
       }
-      const user = await User.findByPk(request.params.id);
+      const user = await User.findByPk(request.userId);
 
       if (!user) {
         return response.status(400).json({ errors: ["Usuario não existe!"] });
